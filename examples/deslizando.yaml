@@ -1,0 +1,15 @@
+# `anim: slide` — a bolha não sai da barra, o entalhe viaja com ela.
+# Mais discreto, e a barra colada no topo em vez de flutuando.
+type: custom:mw-nav-bar-card
+anim: slide
+float: false
+paper: green-2
+paper_dark: green-6
+accent: "#2e7d32"
+mobile:  { position: top, show: icon }
+tablet:  { position: top, show: both }
+desktop: { position: top, show: both }
+routes:
+  - { url: /reino-do-dende-7-0, label: CASA,   icon: mdi:home }
+  - { url: /clima-3-0,          label: CLIMA,  icon: mdi:weather-partly-cloudy }
+  - { url: /saude-3-0,          label: SAÚDE,  icon: mdi:heart-pulse }

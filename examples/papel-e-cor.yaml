@@ -1,0 +1,10 @@
+# Papel MW nos dois temas + bolha na cor do ambiente (regra 100).
+# O tema escuro é escolhido pelo HA (`themes.darkMode`), não pelo relógio.
+type: custom:mw-nav-bar-card
+paper: blue-2            # 49 tons: <matiz>-<1..7> (1 = quase branco)
+paper_dark: indigo-5     # 49 tons de noite
+accent: "#b3246b"        # qualquer cor CSS, ou var(--mw-cor-do-ambiente)
+bubble: 52               # diâmetro da bolha, em px
+routes:
+  - { url: /sala-7-1,  label: SALA,  icon: mdi:sofa }
+  - { url: /suite-7-1, label: SUÍTE, icon: mdi:bed }

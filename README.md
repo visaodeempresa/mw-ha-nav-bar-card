@@ -51,7 +51,122 @@ Perfil — `{ position, show, hidden }`:
 `position`: `bottom` · `top` · `left` · `right` — o entalhe acompanha a borda.
 `show`: `icon` · `label` · `both`. `hidden: true` some com a barra na faixa.
 
-Exemplos completos em [`examples/`](examples/).
+## Exemplos
+
+Todos também em [`examples/`](examples/), prontos para colar. As entidades e as
+rotas são as de uma casa real — troque pelas suas.
+
+### 1 · O mínimo que funciona
+
+```yaml
+type: custom:mw-nav-bar-card
+routes:
+  - { url: /cozinha-7-1,           label: COZINHA,           icon: mdi:food-takeout-box }
+  - { url: /sala-7-1,              label: SALA,              icon: mdi:sofa }
+  - { url: /escritorio-7-1,        label: ESCRITÓRIO,        icon: mdi:monitor }
+  - { url: /quarto-7-1,            label: QUARTO,            icon: mdi:laptop }
+  - { url: /banheiro-social-7-1,   label: BANHEIRO SOCIAL,   icon: mdi:shower-head }
+  - { url: /suite-7-1,             label: SUÍTE,             icon: mdi:bed }
+  - { url: /banheiro-da-suite-7-1, label: BANHEIRO DA SUÍTE, icon: mdi:shower }
+```
+
+### 2 · Drop-in do `navbar-card`
+
+```yaml
+type: custom:mw-nav-bar-card        # era: custom:navbar-card
+routes:
+  - { url: /cozinha-7-1, label: COZINHA, icon: mdi:food-takeout-box }
+  - { url: /sala-7-1,    label: SALA,    icon: mdi:sofa }
+  - { url: /suite-7-1,   label: SUÍTE,   icon: mdi:bed }
+haptic: true
+desktop: { position: left }
+```
+
+O bloco `styles:` de CSS cru que o `navbar-card` exigia **não é mais preciso**.
+
+### 3 · Um desenho por tamanho de tela
+
+```yaml
+type: custom:mw-nav-bar-card
+accent: "#b3246b"
+paper: blue-2
+paper_dark: indigo-5
+routes:
+  - { url: /cozinha-7-1, label: COZINHA, icon: mdi:food-takeout-box }
+  - { url: /sala-7-1,    label: SALA,    icon: mdi:sofa }
+  - { url: /suite-7-1,   label: SUÍTE,   icon: mdi:bed }
+mobile:  { position: bottom, show: icon }
+tablet:  { position: bottom, show: both }
+desktop: { position: left,   show: both }
+```
+
+### 4 · Papel e cor
+
+```yaml
+type: custom:mw-nav-bar-card
+paper: blue-2            # 49 tons: <matiz>-<1..7> (1 = quase branco)
+paper_dark: indigo-5     # 49 tons de noite
+accent: "#b3246b"        # qualquer cor CSS, ou var(--mw-cor-do-ambiente)
+bubble: 52               # diâmetro da bolha, em px
+routes:
+  - { url: /sala-7-1,  label: SALA,  icon: mdi:sofa }
+  - { url: /suite-7-1, label: SUÍTE, icon: mdi:bed }
+```
+
+O tema escuro é o que o HA diz (`themes.darkMode`), não o relógio.
+
+### 5 · Deslizando, colada no topo
+
+```yaml
+type: custom:mw-nav-bar-card
+anim: slide              # a bolha não sai da barra; o entalhe viaja com ela
+float: false             # colada na borda, sem margem e sem canto arredondado
+paper: green-2
+paper_dark: green-6
+accent: "#2e7d32"
+mobile:  { position: top, show: icon }
+tablet:  { position: top, show: both }
+desktop: { position: top, show: both }
+routes:
+  - { url: /reino-do-dende-7-0, label: CASA,  icon: mdi:home }
+  - { url: /clima-3-0,          label: CLIMA, icon: mdi:weather-partly-cloudy }
+  - { url: /saude-3-0,          label: SAÚDE, icon: mdi:heart-pulse }
+```
+
+### 6 · Em pé na direita, escondida no celular
+
+```yaml
+type: custom:mw-nav-bar-card
+mobile:  { hidden: true }
+tablet:  { position: right, show: icon }
+desktop: { position: right, show: both }
+breakpoints: { tablet: 700, desktop: 1100 }
+routes:
+  - { url: /planta-mw-01,     label: PLANTA,    icon: mdi:floor-plan }
+  - { url: /home-security-01, label: SEGURANÇA, icon: mdi:cctv }
+  - { url: /mw-components,    label: PEÇAS,     icon: mdi:puzzle }
+```
+
+### 7 · Rota que não navega
+
+```yaml
+type: custom:mw-nav-bar-card
+routes:
+  - { url: /sala-7-1, label: SALA, icon: mdi:sofa }
+  - label: LETÍCIA
+    icon: mdi:microphone
+    entity: assist_satellite.leticia_escritorio
+    tap_action: { action: more-info }
+  - label: CENA
+    icon: mdi:movie-open
+    tap_action:
+      action: call-service
+      service: scene.turn_on
+      target: { entity_id: scene.sala_cinema }
+```
+
+O `entity` da rota viaja junto com a ação — sem ele o `more-info` não sabe de
+quem é a ficha.
 
 ## O que custa na tela
 

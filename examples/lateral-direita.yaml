@@ -1,0 +1,11 @@
+# Em pé na borda direita no computador, some no celular.
+# O entalhe acompanha a borda virada para o conteúdo — a mesma matemática.
+type: custom:mw-nav-bar-card
+mobile:  { hidden: true }
+tablet:  { position: right, show: icon }
+desktop: { position: right, show: both }
+breakpoints: { tablet: 700, desktop: 1100 }
+routes:
+  - { url: /planta-mw-01,  label: PLANTA,  icon: mdi:floor-plan }
+  - { url: /home-security-01, label: SEGURANÇA, icon: mdi:cctv }
+  - { url: /mw-components, label: PEÇAS,   icon: mdi:puzzle }

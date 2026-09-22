@@ -1,0 +1,15 @@
+# Rota que não navega: `tap_action` por item. O `entity` da rota viaja junto,
+# então `more-info` sabe de quem é a ficha.
+type: custom:mw-nav-bar-card
+routes:
+  - { url: /sala-7-1, label: SALA, icon: mdi:sofa }
+  - label: LETÍCIA
+    icon: mdi:microphone
+    entity: assist_satellite.leticia_escritorio
+    tap_action: { action: more-info }
+  - label: CENA
+    icon: mdi:movie-open
+    tap_action:
+      action: call-service
+      service: scene.turn_on
+      target: { entity_id: scene.sala_cinema }

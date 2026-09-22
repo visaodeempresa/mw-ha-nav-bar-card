@@ -1,0 +1,10 @@
+# Drop-in: a config do custom:navbar-card funciona trocando só o `type:`.
+# O bloco `styles:` de CSS cru que ele exigia deixa de ser preciso — papel,
+# cor, relevo e sombra são opções da peça.
+type: custom:mw-nav-bar-card        # era: custom:navbar-card
+routes:
+  - { url: /cozinha-7-1, label: COZINHA, icon: mdi:food-takeout-box }
+  - { url: /sala-7-1,    label: SALA,    icon: mdi:sofa }
+  - { url: /suite-7-1,   label: SUÍTE,   icon: mdi:bed }
+haptic: true
+desktop: { position: left }

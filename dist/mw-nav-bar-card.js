@@ -23,7 +23,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "0.1.0";
+  const VERSION = "0.1.1";
 
   /* ==== blocos embutidos de IA/lib — conferidos por IA/tools/check-embeds.sh ==== */
   // >>> paper-palette v1 — fonte canônica: /Volumes/SSD-T1-01/CLAUDE-SSD/IA/lib/paper-palette/paper-palette.js
@@ -461,9 +461,11 @@
       if (user && c.haptic !== false) haptic("selection");
       if (i !== this._i) this._animateTo(i);
       if (r.tap_action && r.tap_action.action && r.tap_action.action !== "navigate") {
+        // O `entity` da rota viaja junto: sem ele o `more-info` do HA não sabe
+        // de quem é a ficha, e a ação vira clique morto.
         this.dispatchEvent(new CustomEvent("hass-action", {
           bubbles: true, composed: true,
-          detail: { config: { tap_action: r.tap_action }, action: "tap" },
+          detail: { config: { entity: r.entity, tap_action: r.tap_action }, action: "tap" },
         }));
         return;
       }
