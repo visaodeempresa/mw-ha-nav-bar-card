@@ -1,0 +1,13 @@
+# Um desenho por tamanho de tela: celular só com ícone no rodapé, tablet com
+# rótulo, computador em pé na lateral esquerda.
+type: custom:mw-nav-bar-card
+accent: "#b3246b"
+paper: blue-2
+paper_dark: indigo-5
+routes:
+  - { url: /cozinha-7-1, label: COZINHA, icon: mdi:food-takeout-box }
+  - { url: /sala-7-1,    label: SALA,    icon: mdi:sofa }
+  - { url: /suite-7-1,   label: SUÍTE,   icon: mdi:bed }
+mobile:  { position: bottom, show: icon }
+tablet:  { position: bottom, show: both }
+desktop: { position: left,   show: both }

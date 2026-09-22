@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Bancada — MW Nav Bar Card</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+<style>
+  body { margin:0; font-family: Roboto, system-ui, sans-serif;
+         background: linear-gradient(160deg,#6d1338,#a8205c 60%,#c13a74);
+         min-height:100vh; color:#fff; }
+  .hud { position:fixed; top:8px; left:8px; z-index:9; font-size:12px;
+         background:rgba(0,0,0,.45); padding:8px 10px; border-radius:8px; }
+  .hud button { font-size:12px; margin:2px; }
+  /* o card é position:fixed — o palco é a própria janela */
+</style>
+</head>
+<body>
+<div class="hud">
+  <div id="st">—</div>
+  <button data-p="bottom">rodapé</button>
+  <button data-p="top">topo</button>
+  <button data-p="left">esquerda</button>
+  <button data-p="right">direita</button>
+  <button data-s="icon">ícone</button>
+  <button data-s="both">ícone+rótulo</button>
+  <button data-s="label">rótulo</button>
+  <button id="dark">tema escuro</button>
+</div>
+
+<script>
+  /* stubs mínimos do frontend do HA.
+   * Regra de folha de estilo não atravessa shadow root: o webfont do MDI com
+   * `<i class="mdi-sofa">` fica invisível dentro do card (sintoma: ícone some,
+   * console limpo). Por isso aqui o ícone é SVG inline, com o path vindo do
+   * pacote @mdi/js. */
+  window.__mdi = import("https://cdn.jsdelivr.net/npm/@mdi/js@7.4.47/+esm").catch(() => null);
+  const camel = (n) => "mdi" + n.replace("mdi:", "").split("-")
+    .map((s) => s[0].toUpperCase() + s.slice(1)).join("");
+  class HaIcon extends HTMLElement {
+    static get observedAttributes() { return ["icon"]; }
+    connectedCallback() { this._r(); }
+    attributeChangedCallback() { this._r(); }
+    async _r() {
+      const m = await window.__mdi;
+      const d = (m && m[camel(this.getAttribute("icon") || "mdi:circle-outline")]) || "";
+      const s = "var(--mdc-icon-size, 24px)";
+      this.style.display = "inline-flex";
+      this.innerHTML = `<svg viewBox="0 0 24 24" style="width:${s};height:${s};fill:currentColor"><path d="${d}"/></svg>`;
+    }
+  }
+  customElements.define("ha-icon", HaIcon);
+  window.__dark = false;
+</script>
+<script src="../dist/mw-nav-bar-card.js"></script>
+<script>
+  const ROUTES = [
+    { url: "/cozinha", label: "COZINHA", icon: "mdi:food-takeout-box" },
+    { url: "/sala", label: "SALA", icon: "mdi:sofa" },
+    { url: "/escritorio", label: "ESCRITÓRIO", icon: "mdi:monitor" },
+    { url: "/quarto", label: "QUARTO", icon: "mdi:bed" },
+    { url: "/banheiro", label: "BANHEIRO", icon: "mdi:shower" },
+  ];
+  history.replaceState(null, "", "/sala");
+
+  let card;
+  const state = { position: "bottom", show: "icon" };
+
+  function mount() {
+    if (card) card.remove();
+    card = document.createElement("mw-nav-bar-card");
+    card.setConfig({
+      routes: ROUTES,
+      accent: "#b3246b",
+      breakpoints: { tablet: 1, desktop: 2 },   // força o perfil desktop na bancada
+      desktop: { position: state.position, show: state.show },
+    });
+    document.documentElement.style.setProperty("--card-background-color", window.__dark ? "#111111" : "#ffffff");
+    card.hass = { themes: { darkMode: window.__dark }, panels: {} };
+    document.body.appendChild(card);
+    document.getElementById("st").textContent = `${state.position} · ${state.show} · ${location.pathname}`;
+  }
+
+  document.querySelectorAll("[data-p]").forEach((b) =>
+    b.addEventListener("click", () => { state.position = b.dataset.p; mount(); }));
+  document.querySelectorAll("[data-s]").forEach((b) =>
+    b.addEventListener("click", () => { state.show = b.dataset.s; mount(); }));
+  document.getElementById("dark").addEventListener("click", () => {
+    window.__dark = !window.__dark;
+    document.body.style.background = window.__dark ? "#0d0d10" : "";
+    mount();
+  });
+  window.addEventListener("location-changed", () => {
+    document.getElementById("st").textContent = `${state.position} · ${state.show} · ${location.pathname}`;
+  });
+  mount();
+</script>
+</body>
+</html>

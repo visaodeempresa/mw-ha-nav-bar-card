@@ -1,0 +1,10 @@
+# Barra de navegação dos sete ambientes — o mínimo que funciona.
+type: custom:mw-nav-bar-card
+routes:
+  - { url: /cozinha-7-1,          label: COZINHA,           icon: mdi:food-takeout-box }
+  - { url: /sala-7-1,             label: SALA,              icon: mdi:sofa }
+  - { url: /escritorio-7-1,       label: ESCRITÓRIO,        icon: mdi:monitor }
+  - { url: /quarto-7-1,           label: QUARTO,            icon: mdi:laptop }
+  - { url: /banheiro-social-7-1,  label: BANHEIRO SOCIAL,   icon: mdi:shower-head }
+  - { url: /suite-7-1,            label: SUÍTE,             icon: mdi:bed }
+  - { url: /banheiro-da-suite-7-1, label: BANHEIRO DA SUÍTE, icon: mdi:shower }
