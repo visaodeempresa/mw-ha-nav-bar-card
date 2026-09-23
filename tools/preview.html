@@ -25,6 +25,42 @@
   <button data-s="both">ícone+rótulo</button>
   <button data-s="label">rótulo</button>
   <button id="dark">tema escuro</button>
+  <br>
+  <button data-shape="circle">redondo</button>
+  <button data-shape="triangle">triângulo</button>
+  <button data-shape="hexagon">hexágono</button>
+  <button data-style="flat">chapado</button>
+  <button data-style="sphere">esfera</button>
+  <button data-style="glass">vidro</button>
+  <button data-style="paper">papel</button>
+  <button data-style="metal">metal</button>
+  <br>
+  <button data-dock="0">dock 0</button>
+  <button data-dock="0.5">dock ½</button>
+  <button data-dock="1">dock 1</button>
+  <button data-gap="0">sem folga</button>
+  <button data-gap="24">folga 24</button>
+  <button id="d3">barra 3D</button>
+  <button id="logo">logo triangular</button>
+  <button id="opa">transparência</button>
+  <button data-rot="0">giro 0</button>
+  <button data-rot="180">giro 180</button>
+  <button data-rot="45">giro 45</button>
+  <button data-marg="2">vão 2</button>
+  <button data-marg="6">vão 6</button>
+  <button data-marg="14">vão 14</button>
+  <br>
+  <button data-style="diamante">diamante</button>
+  <button data-style="rubi">rubi</button>
+  <button data-style="topazio">topázio</button>
+  <button data-style="esmeralda">esmeralda</button>
+  <button data-style="obsidiana">obsidiana</button>
+  <button data-style="quartzo-rosa">quartzo rosa</button>
+  <button data-style="agua-marinha">água-marinha</button>
+  <button data-style="marmore-branco">mármore branco</button>
+  <button data-style="marmore-negro">mármore negro</button>
+  <button data-style="perola-branca">pérola branca</button>
+  <button data-style="perola-negra">pérola negra</button>
 </div>
 
 <script>
@@ -54,16 +90,23 @@
 <script src="../dist/mw-nav-bar-card.js"></script>
 <script>
   const ROUTES = [
-    { url: "/cozinha", label: "COZINHA", icon: "mdi:food-takeout-box" },
-    { url: "/sala", label: "SALA", icon: "mdi:sofa" },
-    { url: "/escritorio", label: "ESCRITÓRIO", icon: "mdi:monitor" },
-    { url: "/quarto", label: "QUARTO", icon: "mdi:bed" },
-    { url: "/banheiro", label: "BANHEIRO", icon: "mdi:shower" },
+    { url: "/cozinha", label: "COZINHA", icon: "mdi:food-takeout-box", color: "#e07b39" },
+    { url: "/sala", label: "SALA", icon: "mdi:sofa", color: "#b3246b" },
+    { label: "CLIMA", icon: "mdi:weather-partly-cloudy", color: "#2f7fb5",
+      submenu: [
+        { url: "/clima-temp", label: "TEMPERATURA", icon: "mdi:thermometer" },
+        { url: "/clima-umid", label: "UMIDADE", icon: "mdi:water-percent" },
+        { url: "/clima-vento", label: "VENTO", icon: "mdi:weather-windy" },
+      ] },
+    { url: "/quarto", label: "QUARTO", icon: "mdi:bed", color: "#6a4fb6" },
+    { url: "/banheiro", label: "BANHEIRO", icon: "mdi:shower", color: "#2e7d32" },
   ];
   history.replaceState(null, "", "/sala");
 
   let card;
-  const state = { position: "bottom", show: "icon" };
+  const state = { position: "bottom", show: "icon", bubble_shape: "circle",
+    bubble_style: "flat", dock: 0, gap: 0, bar_3d: false, bubble_image: "",
+    bubble_opacity: 1, bubble_rotate: 0, bubble_margin: 6 };
 
   function mount() {
     if (card) card.remove();
@@ -72,25 +115,47 @@
       routes: ROUTES,
       accent: "#b3246b",
       breakpoints: { tablet: 1, desktop: 2 },   // força o perfil desktop na bancada
+      bubble_shape: state.bubble_shape, bubble_style: state.bubble_style,
+      bubble_opacity: state.bubble_opacity, bubble_image: state.bubble_image,
+      dock: state.dock, gap: state.gap, bar_3d: state.bar_3d, bubble: 52,
+      bubble_rotate: state.bubble_rotate, bubble_margin: state.bubble_margin,
       desktop: { position: state.position, show: state.show },
     });
     document.documentElement.style.setProperty("--card-background-color", window.__dark ? "#111111" : "#ffffff");
     card.hass = { themes: { darkMode: window.__dark }, panels: {} };
     document.body.appendChild(card);
-    document.getElementById("st").textContent = `${state.position} · ${state.show} · ${location.pathname}`;
+    document.getElementById("st").textContent =
+      `${state.position} · ${state.show} · ${state.bubble_shape}/${state.bubble_style}`
+      + ` · dock ${state.dock} · gap ${state.gap}${state.bar_3d ? " · 3D" : ""} · ${location.pathname}`;
   }
 
   document.querySelectorAll("[data-p]").forEach((b) =>
     b.addEventListener("click", () => { state.position = b.dataset.p; mount(); }));
   document.querySelectorAll("[data-s]").forEach((b) =>
     b.addEventListener("click", () => { state.show = b.dataset.s; mount(); }));
+  const bind = (attr, key, cast) => document.querySelectorAll(`[data-${attr}]`).forEach((b) =>
+    b.addEventListener("click", () => { state[key] = cast ? cast(b.dataset[attr]) : b.dataset[attr]; mount(); }));
+  bind("shape", "bubble_shape"); bind("style", "bubble_style");
+  bind("dock", "dock", Number); bind("gap", "gap", Number);
+  bind("rot", "bubble_rotate", Number); bind("marg", "bubble_margin", Number);
+  document.getElementById("d3").addEventListener("click", () => { state.bar_3d = !state.bar_3d; mount(); });
+  document.getElementById("logo").addEventListener("click", () => {
+    state.bubble_image = state.bubble_image ? "" : "../assets/mw-logo.png";
+    if (state.bubble_image) state.bubble_shape = "triangle";
+    mount();
+  });
+  document.getElementById("opa").addEventListener("click", () => {
+    state.bubble_opacity = state.bubble_opacity === 1 ? 0.55 : 1; mount();
+  });
   document.getElementById("dark").addEventListener("click", () => {
     window.__dark = !window.__dark;
     document.body.style.background = window.__dark ? "#0d0d10" : "";
     mount();
   });
   window.addEventListener("location-changed", () => {
-    document.getElementById("st").textContent = `${state.position} · ${state.show} · ${location.pathname}`;
+    document.getElementById("st").textContent =
+      `${state.position} · ${state.show} · ${state.bubble_shape}/${state.bubble_style}`
+      + ` · dock ${state.dock} · gap ${state.gap}${state.bar_3d ? " · 3D" : ""} · ${location.pathname}`;
   });
   mount();
 </script>

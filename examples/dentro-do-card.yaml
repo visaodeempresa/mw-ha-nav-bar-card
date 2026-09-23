@@ -1,0 +1,9 @@
+# `inline: true` — a barra mora dentro do card, entre os outros, em vez de
+# colar na borda da tela. É também o modo que o editor usa na pré-visualização.
+type: custom:mw-nav-bar-card
+inline: true
+bubble_style: sphere
+gap: 20
+routes:
+  - { url: /sala-7-1,  label: SALA,  icon: mdi:sofa }
+  - { url: /suite-7-1, label: SUÍTE, icon: mdi:bed }

@@ -1,0 +1,16 @@
+# A logo da casa como botão de destaque, em triângulo invertido e com relevo.
+# A imagem é a mesma das integrações MW, publicada em /config/www/mw/.
+type: custom:mw-nav-bar-card
+bubble_shape: triangle
+triangle_angle: 60        # equilátero; 30 afina a ponta, 120 achata
+bubble_rotate: 180        # de ponta-cabeça
+bubble_style: none        # só a imagem, sem pastilha de cor atrás
+bubble_image: /local/mw/mw-logo.png
+image_3d: true
+bubble: 56
+bubble_margin: 8          # o vão entre o triângulo e a barra
+dock: 0.35                # o quanto ele entra na barra
+bar_3d: true
+routes:
+  - { url: /reino-do-dende-7-0, label: CASA, icon: mdi:home }
+  - { url: /sala-7-1,           label: SALA, icon: mdi:sofa }

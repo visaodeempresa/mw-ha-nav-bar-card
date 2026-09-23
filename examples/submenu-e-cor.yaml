@@ -1,0 +1,13 @@
+# Submenu e cor por rota: cada dashboard veste a sua cor quando é a tela de
+# agora; uma rota com `submenu` abre a lista em vez de navegar.
+type: custom:mw-nav-bar-card
+bubble_style: sphere
+routes:
+  - { url: /reino-do-dende-7-0, label: CASA, icon: mdi:home, color: "#b3246b" }
+  - label: CLIMA
+    icon: mdi:weather-partly-cloudy
+    color: "#2f7fb5"
+    submenu:
+      - { url: /clima-3-0,  label: PREVISÃO,    icon: mdi:weather-partly-cloudy }
+      - { url: /clima-temp, label: TEMPERATURA, icon: mdi:thermometer }
+      - { url: /clima-umid, label: UMIDADE,     icon: mdi:water-percent }

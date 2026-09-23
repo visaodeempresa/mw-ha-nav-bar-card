@@ -1,0 +1,18 @@
+# Pedra, aresta 3D e profundidade. A pedra manda na cor: `accent` e a `color`
+# da rota ficam de fora, e a tinta do ícone se ajusta sozinha.
+# Pedras: diamante · rubi · topazio · esmeralda · obsidiana · quartzo-rosa ·
+#         agua-marinha · marmore-branco · marmore-negro · perola-branca ·
+#         perola-negra
+type: custom:mw-nav-bar-card
+bubble_style: obsidiana
+bubble_shape: triangle
+triangle_angle: 60
+bubble_rotate: 180
+bubble_bevel: true
+bubble: 64
+dock: 1.2
+gap: -12
+bar_3d: true
+routes:
+  - { url: /reino-do-dende-7-0, label: CASA, icon: mdi:home }
+  - { url: /sala-7-1,           label: SALA, icon: mdi:sofa }

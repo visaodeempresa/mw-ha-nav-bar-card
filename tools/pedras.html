@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Bancada — pedras</title>
+<style>
+  body { margin:0; background:#15151a; color:#eee; font-family:Roboto,system-ui,sans-serif; }
+  .g { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:10px; padding:12px; }
+  .c { background:#fff; border-radius:12px; padding:4px 10px 0; }
+  .c.n { background:#222228; }
+  h3 { margin:8px 0 0; font-size:13px; color:#333; } .c.n h3 { color:#ddd; }
+</style></head><body>
+<div class="g" id="g"></div>
+
+<div class="hud" hidden>
+  <div id="st">—</div>
+  <button data-p="bottom">rodapé</button>
+  <button data-p="top">topo</button>
+  <button data-p="left">esquerda</button>
+  <button data-p="right">direita</button>
+  <button data-s="icon">ícone</button>
+  <button data-s="both">ícone+rótulo</button>
+  <button data-s="label">rótulo</button>
+  <button id="dark">tema escuro</button>
+  <br>
+  <button data-shape="circle">redondo</button>
+  <button data-shape="triangle">triângulo</button>
+  <button data-shape="hexagon">hexágono</button>
+  <button data-style="flat">chapado</button>
+  <button data-style="sphere">esfera</button>
+  <button data-style="glass">vidro</button>
+  <button data-style="paper">papel</button>
+  <button data-style="metal">metal</button>
+  <br>
+  <button data-dock="0">dock 0</button>
+  <button data-dock="0.5">dock ½</button>
+  <button data-dock="1">dock 1</button>
+  <button data-gap="0">sem folga</button>
+  <button data-gap="24">folga 24</button>
+  <button id="d3">barra 3D</button>
+  <button id="logo">logo triangular</button>
+  <button id="opa">transparência</button>
+  <button data-rot="0">giro 0</button>
+  <button data-rot="180">giro 180</button>
+  <button data-rot="45">giro 45</button>
+  <button data-marg="2">vão 2</button>
+  <button data-marg="6">vão 6</button>
+  <button data-marg="14">vão 14</button>
+  <br>
+  <button data-style="diamante">diamante</button>
+  <button data-style="rubi">rubi</button>
+  <button data-style="topazio">topázio</button>
+  <button data-style="esmeralda">esmeralda</button>
+  <button data-style="obsidiana">obsidiana</button>
+  <button data-style="quartzo-rosa">quartzo rosa</button>
+  <button data-style="agua-marinha">água-marinha</button>
+  <button data-style="marmore-branco">mármore branco</button>
+  <button data-style="marmore-negro">mármore negro</button>
+  <button data-style="perola-branca">pérola branca</button>
+  <button data-style="perola-negra">pérola negra</button>
+</div>
+
+<script>
+  /* stubs mínimos do frontend do HA.
+   * Regra de folha de estilo não atravessa shadow root: o webfont do MDI com
+   * `<i class="mdi-sofa">` fica invisível dentro do card (sintoma: ícone some,
+   * console limpo). Por isso aqui o ícone é SVG inline, com o path vindo do
+   * pacote @mdi/js. */
+  window.__mdi = import("https://cdn.jsdelivr.net/npm/@mdi/js@7.4.47/+esm").catch(() => null);
+  const camel = (n) => "mdi" + n.replace("mdi:", "").split("-")
+    .map((s) => s[0].toUpperCase() + s.slice(1)).join("");
+  class HaIcon extends HTMLElement {
+    static get observedAttributes() { return ["icon"]; }
+    connectedCallback() { this._r(); }
+    attributeChangedCallback() { this._r(); }
+    async _r() {
+      const m = await window.__mdi;
+      const d = (m && m[camel(this.getAttribute("icon") || "mdi:circle-outline")]) || "";
+      const s = "var(--mdc-icon-size, 24px)";
+      this.style.display = "inline-flex";
+      this.innerHTML = `<svg viewBox="0 0 24 24" style="width:${s};height:${s};fill:currentColor"><path d="${d}"/></svg>`;
+    }
+  }
+  customElements.define("ha-icon", HaIcon);
+  window.__dark = false;
+</script>
+
+<script src="../dist/mw-nav-bar-card.js"></script>
+<script>
+  const PEDRAS = ["diamante","rubi","topazio","esmeralda","obsidiana","quartzo-rosa",
+    "agua-marinha","marmore-branco","marmore-negro","perola-branca","perola-negra"];
+  const R = [
+    { url:"/a", label:"CASA", icon:"mdi:home" },
+    { url:"/b", label:"SALA", icon:"mdi:sofa" },
+    { url:"/c", label:"CLIMA", icon:"mdi:weather-partly-cloudy" },
+  ];
+  history.replaceState(null,"","/a");
+  const g = document.getElementById("g");
+  for (const p of PEDRAS) {
+    for (const escuro of [false, true]) {
+      const box = document.createElement("div");
+      box.className = "c" + (escuro ? " n" : "");
+      box.innerHTML = "<h3>" + p + (escuro ? " · noite" : " · dia") + "</h3>";
+      const card = document.createElement("mw-nav-bar-card");
+      card.setConfig({ routes: R, inline: true, bubble: 58, bubble_style: p,
+        breakpoints: { tablet: 99998, desktop: 99999 },
+        paper: escuro ? "paper" : "paper", paper_dark: "paper",
+        mobile: { position: "bottom", show: "icon" } });
+      card.hass = { themes: { darkMode: escuro }, panels: {} };
+      box.appendChild(card); g.appendChild(box);
+      card.style.setProperty("--card-background-color", escuro ? "#111" : "#fff");
+    }
+  }
+</script></body></html>
